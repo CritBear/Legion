@@ -1,9 +1,7 @@
 var DrawTool = {
-	roundedRect: function(camera, x, y, width, height, radius, color) {
-		if(!camera) return;
+	
+	roundedRect: function(x, y, width, height, radius) {
 		
-		ctx.save();
-		ctx.fillStyle = color;
 		ctx.beginPath();
 		ctx.moveTo(x, y + radius);
 		ctx.lineTo(x, y + height - radius);
@@ -15,6 +13,12 @@ var DrawTool = {
 		ctx.lineTo(x + radius, y);
 		ctx.arcTo(x, y, x, y + radius, radius);
 		ctx.fill();
-		ctx.restore();
+	},
+	
+	circle: function(x, y, radius) {
+		
+		ctx.beginPath();
+		ctx.arc(x + radius, y + radius, radius, 0, Math.PI*2, false);
+		ctx.fill();
 	},
 }

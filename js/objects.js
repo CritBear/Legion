@@ -43,21 +43,38 @@ var Character = (function() {
 	function Character(options) {
 		this.pos = options.pos || new Vector();
 		this.vel = options.vel || new Vector();
-		this.width = options.width || 20;
-		this.height = options.height || 70;
+		this.width = options.width || 30;
+		this.height = options.height || 90;
 		this.color = options.color || "black";
 		this.maxHealth = options.maxHealth || 100;
 		this.health = this.maxHealth;
+		
+		this.head = {
+			pos: this.pos.clone(),
+			radius: this.width/2,
+		};
+		this.body = {
+			pos: Vector.add(this.pos, new Vector(0, this.width)),
+			width: this.width,
+			height: this.height - this.width,
+		};
 	}
 	Character.prototype.update = function() {
 		this.updatePos();
 		this.draw();
 	};
 	Character.prototype.updatePos = function() {
+		this.pos.add(this.vel);
+	};
+	Character.prototype.moveTo = function(vector) {
 		
 	};
 	Character.prototype.draw = function() {
-		DrawTool.roundedRect(camera, this.pos.x, this.pos.y, this.width, this.height, 9, this.color);
+		ctx.save();
+		ctx.fillStyle = this.color;
+		DrawTool.circle(this.head.pos.x, this.head.pos.y, this.head.radius);
+		DrawTool.roundedRect(this.body.pos.x, this.body.pos.y, this.body.width, this.body.height, 9);
+		ctx.restore();
 		/* 
 		1) draw line
 			ctx.beginPath();
@@ -80,7 +97,3 @@ var Character = (function() {
 	};
 	return Character;
 })();
-
-var camera = {
-	pos: new Vector(),
-}
