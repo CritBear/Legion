@@ -1,3 +1,30 @@
+var makeLegion = function(leader) {
+	var options = { leader: leader };
+	
+	return {
+		
+	}
+}
+
+var Legion = (function() {
+	function Legion(options) {
+		this.members = [];
+	}
+	Legion.prototype.moveTo = function() {
+		
+	};
+	Legion.prototype.attack = function(target) {
+		this.members.forEach(function(member) {
+			member.attack(target);
+		});
+	};
+	Legion.prototype.addMember = function(member) {
+		this.members.push(member);
+		return this;
+	};
+	return Legion;
+})();
+
 var makeCharacter = function(name) {
 	var options = { name: name };
 	
@@ -61,7 +88,6 @@ var Character = (function() {
 	}
 	Character.prototype.update = function() {
 		this.updatePos();
-		this.draw();
 	};
 	Character.prototype.updatePos = function() {
 		this.pos.add(this.vel);
@@ -69,11 +95,14 @@ var Character = (function() {
 	Character.prototype.moveTo = function(vector) {
 		
 	};
-	Character.prototype.draw = function() {
+	Character.prototype.attack = function(target) {
+		
+	};
+	Character.prototype.draw = function(ctx) {
 		ctx.save();
 		ctx.fillStyle = this.color;
-		DrawTool.circle(this.head.pos.x, this.head.pos.y, this.head.radius);
-		DrawTool.roundedRect(this.body.pos.x, this.body.pos.y, this.body.width, this.body.height, 9);
+		DrawTool.circle(ctx, this.head.pos.x, this.head.pos.y, this.head.radius);
+		DrawTool.roundedRect(ctx, this.body.pos.x, this.body.pos.y, this.body.width, this.body.height, 9);
 		ctx.restore();
 		/* 
 		1) draw line

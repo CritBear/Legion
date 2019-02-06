@@ -1,33 +1,41 @@
-var canvas;
-var ctx;
 
-var Key = {
-	_pressed: {},
+var GameManager = (function() {
+	var instance;
 	
-	LEFT: 37,
-	UP: 38,
-	RIGHT: 39,
-	DOWN: 40,
+	function initiate() {
+		return {
+			canvas: undefined,
+			ctx: undefined,
+			key: {
+				_pressed: {},
 	
-	isDown: function(keyCode) {
-		return this._pressed[keyCode];
-	},
-	onKeyDown: function(event) {
-		this._pressed[event.keyCode] = true;
-	},
-	onKeyUp: function(event) {
-		this._pressed[event.keyCode] = false;
-	},
-};
-
-var camera = {
-	pos: new Vector(),
-	vel: new Vector(),
-	
-	update: function() {
-		this.pos.add(this.vel);
-	},
-};
+				LEFT: 37,
+				UP: 38,
+				RIGHT: 39,
+				DOWN: 40,
+				
+				isDown: function(keyCode) {
+					return this._pressed[keyCode];
+				},
+				onKeyDown: function(event) {
+					this._pressed[event.keyCode] = true;
+				},
+				onKeyUp: function(event) {
+					this._pressed[event.keyCode] = false;
+				},
+			},
+			camera: undefined,
+		};
+	}
+	return {
+		getInstance: function() {
+			if(!instance) {
+				instance = initiate();
+			}
+			return instance;
+		}
+	}
+})();
 
 var player = {
 	pos: new Vector(0, 0),
@@ -35,28 +43,27 @@ var player = {
 	width: 50,
 	height: 50,
 	
-	update: function() {
-		this.updatePos();
-		this.draw();
+	update: function(key) {
+		this.updatePos(key);
 	},
-	updatePos: function() {
-		if(Key.isDown(Key.UP)) {
+	updatePos: function(key) {
+		if(key.isDown(key.UP)) {
 			this.vel.y = -2;
-		}else if(Key.isDown(Key.DOWN)) {
+		}else if(key.isDown(key.DOWN)) {
 			this.vel.y = 2;
 		}else{
 			this.vel.y = 0;
 		}
-		if(Key.isDown(Key.LEFT)) {
+		if(key.isDown(key.LEFT)) {
 			this.vel.x = -2;
-		}else if(Key.isDown(Key.RIGHT)) {
+		}else if(key.isDown(key.RIGHT)) {
 			this.vel.x = 2;
 		}else{
 			this.vel.x = 0;
 		}
 		this.pos.add(this.vel);
 	},
-	draw: function() {
+	draw: function(ctx) {
 		ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
 	},
 };
@@ -65,18 +72,21 @@ var c1;
 
 function init() {
 	
+	var GM = GameManager.getInstance();
+	
 	document.body.style.margin = "0px";
 	document.body.style.overflow = "hidden";
 
-	canvas = document.createElement("canvas");
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-	document.body.appendChild(canvas);
+	GM.canvas = document.createElement("canvas");
+	GM.canvas.width = window.innerWidth;
+	GM.canvas.height = window.innerHeight;
+	document.body.appendChild(GM.canvas);
 
-	ctx = canvas.getContext("2d");
+	GM.ctx = GM.canvas.getContext("2d");
+	GM.camera = new Camera(GM.ctx);
 	
-	window.addEventListener('keyup', function(event) { Key.onKeyUp(event); }, false);
-	window.addEventListener('keydown', function(event) { Key.onKeyDown(event); }, false);
+	window.addEventListener('keyup', function(event) { GM.key.onKeyUp(event); }, false);
+	window.addEventListener('keydown', function(event) { GM.key.onKeyDown(event); }, false);
 	
 	
 	c1 = makeCharacter("tmp").setPos(new Vector(10,10)).setSize(30,90).spawn();
@@ -92,12 +102,13 @@ function loop() {
 }
 
 function update() {
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	
-	/* Debuging______________________________________*/
+	//GameManger 싱글턴으로 전역변수 다 빼는 게 맞는 건가?
+	var GM = GameManager.getInstance();
+	/* Debuging______________________________________
 	ctx.font = "20px Arial";
 	ctx.fillText(camera.vel.x, 10, 200);
 	ctx.fillText(camera.pos.x, 10, 230);
+	*/
 	/*
 	Player.prototype.update = function() {
 		if (Key.isDown(Key.UP)) this.moveUp();
@@ -106,11 +117,18 @@ function update() {
 		if (Key.isDown(Key.RIGHT)) this.moveRight();
 	};
 	*/
-	camera.update(); //camera.update must be out of ctx.translate
-	ctx.translate( camera.pos.x, camera.pos.y );
-	// Object Update
-	player.update();
+	player.update(GM.key);
 	c1.update();
 	
-	ctx.translate( -camera.pos.x, -camera.pos.y );
+	GM.ctx.clearRect(0, 0, GM.canvas.width, GM.canvas.height);
+	
+	GM.camera.moveTo(player.pos.x, player.pos.y);
+	
+	GM.camera.begin();
+	
+	c1.draw(GM.ctx);
+	player.draw(GM.ctx);
+	
+	GM.camera.end();
+	
 }

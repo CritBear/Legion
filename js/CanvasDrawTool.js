@@ -1,6 +1,6 @@
 var DrawTool = {
 	
-	roundedRect: function(x, y, width, height, radius) {
+	roundedRect: function(ctx, x, y, width, height, radius) {
 		
 		ctx.beginPath();
 		ctx.moveTo(x, y + radius);
@@ -15,7 +15,7 @@ var DrawTool = {
 		ctx.fill();
 	},
 	
-	circle: function(x, y, radius) {
+	circle: function(ctx, x, y, radius) {
 		
 		ctx.beginPath();
 		ctx.arc(x + radius, y + radius, radius, 0, Math.PI*2, false);
