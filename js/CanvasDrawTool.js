@@ -21,4 +21,10 @@ var DrawTool = {
 		ctx.arc(x + radius, y + radius, radius, 0, Math.PI*2, false);
 		ctx.fill();
 	},
+	
+	sword: function(ctx, x, y, width, height, rotate) {
+		
+		ctx.beginPath();
+		ctx.moveTo
+	}
 }

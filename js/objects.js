@@ -1,14 +1,18 @@
-var makeLegion = function(leader) {
-	var options = { leader: leader };
+var makeLegion = function(name) {
+	var options = { name: name };
+	var memberByType;
 	
 	return {
-		
+		setByType: function(list) {
+			memberByType = list;
+		}
 	}
 }
 
 var Legion = (function() {
 	function Legion(options) {
 		this.members = [];
+		this.moveSpeed = options.moveSpeed || 1;
 	}
 	Legion.prototype.moveTo = function() {
 		
@@ -60,6 +64,10 @@ var makeCharacter = function(name) {
 			options.maxHealth = value;
 			return this;
 		},
+		setType: function(type) {
+			options.type = type;
+			return this;
+		},
 		spawn: function() {
 			return new Character(options);
 		}
@@ -75,13 +83,14 @@ var Character = (function() {
 		this.color = options.color || "black";
 		this.maxHealth = options.maxHealth || 100;
 		this.health = this.maxHealth;
+		this.type = options.type || "SwordMan";
 	}
 	Character.prototype.update = function() {
 		this.updatePos();
 		this.draw();
 	};
 	Character.prototype.updatePos = function() {
-		this.moveTo(new Vector(player.pos.x, player.pos.y - player.height + this.height));
+		this.moveTo(new Vector(player.pos.x, player.pos.y + player.height - this.height));
 		this.pos.add(this.vel);
 	};
 	Character.prototype.moveTo = function(vector) {
@@ -91,12 +100,21 @@ var Character = (function() {
 	Character.prototype.attack = function(target) {
 		
 	};
+	Character.prototype.damaged = function(damage) {
+		this.health -= damage;
+	};
 	Character.prototype.draw = function() {
 		var ctx = Game.ctx;
 		ctx.save();
 		ctx.fillStyle = this.color;
 		DrawTool.circle(ctx, this.pos.x, this.pos.y, this.width/2);
 		DrawTool.roundedRect(ctx, this.pos.x, this.pos.y+this.width, this.width, this.height-this.width, 9);
+		
+		ctx.fillStyle = "#eee";
+		ctx.fillRect(this.pos.x + this.width/2 - this.maxHealth/2, this.pos.y - 30, this.maxHealth, 10);
+		ctx.fillStyle = "#70F170";
+		ctx.fillRect(this.pos.x + this.width/2 - this.maxHealth/2, this.pos.y - 30, this.health, 10);
+		
 		ctx.restore();
 		/* 
 		1) draw line

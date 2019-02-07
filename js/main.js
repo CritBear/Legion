@@ -6,10 +6,10 @@ var Game = {
 	key: {
 		_pressed: {},
 		
-		LEFT: 37,
-		UP: 38,
-		RIGHT: 39,
-		DOWN: 40,
+		LEFT: 65,
+		UP: 87,
+		RIGHT: 68,
+		DOWN: 83,
 		
 		isDown: function(keyCode) {
 			return this._pressed[keyCode];
@@ -110,6 +110,8 @@ function update() {
 	
 	c1.update();
 	player.update();
+	
+	DrawTool.sword(Game.ctx, 100, 100, 10, 100, 0);
 	
 	// Debuging______________________________________
 	Game.ctx.fillText(c1.vel.x, 10, 200);
