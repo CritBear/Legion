@@ -83,7 +83,7 @@ var Character = (function() {
 		this.color = options.color || "black";
 		this.maxHealth = options.maxHealth || 100;
 		this.health = this.maxHealth;
-		this.type = options.type || "SwordMan";
+		this.type = options.type || "sword";
 	}
 	Character.prototype.update = function() {
 		this.updatePos();
@@ -105,6 +105,7 @@ var Character = (function() {
 	};
 	Character.prototype.draw = function() {
 		var ctx = Game.ctx;
+		
 		ctx.save();
 		ctx.fillStyle = this.color;
 		DrawTool.circle(ctx, this.pos.x, this.pos.y, this.width/2);
@@ -114,6 +115,16 @@ var Character = (function() {
 		ctx.fillRect(this.pos.x + this.width/2 - this.maxHealth/2, this.pos.y - 30, this.maxHealth, 10);
 		ctx.fillStyle = "#70F170";
 		ctx.fillRect(this.pos.x + this.width/2 - this.maxHealth/2, this.pos.y - 30, this.health, 10);
+		
+		ctx.fillStyle = "black";
+		switch(this.type) {
+			case "sword":
+				DrawTool.sword(ctx, this.pos.x + this.width, this.pos.y + this.height/2, 0.5, 30 * Math.PI/180);
+				break;
+			case "shield":
+				DrawTool.shield(ctx, this.pos.x, this.pos.y, 1);
+				break;
+		}
 		
 		ctx.restore();
 		/* 

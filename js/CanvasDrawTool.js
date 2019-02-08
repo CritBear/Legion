@@ -22,9 +22,36 @@ var DrawTool = {
 		ctx.fill();
 	},
 	
-	sword: function(ctx, x, y, width, height, rotate) {
+	sword: function(ctx, x, y, size, radian) {
+		
+		ctx.translate(x, y);
+		ctx.rotate(radian);
+		ctx.translate(-x, -y);
 		
 		ctx.beginPath();
-		ctx.moveTo
-	}
+		ctx.moveTo(x - 5 * size, y + 35 * size);
+		ctx.lineTo(x + 5 * size, y + 35 * size);
+		ctx.lineTo(x + 5 * size, y - 15 * size);
+		ctx.lineTo(x + 35 * size, y - 15 * size);
+		ctx.lineTo(x + 35 * size, y - 25 * size);
+		ctx.lineTo(x + 10 * size, y - 25 * size);
+		ctx.lineTo(x + 10 * size, y - 155 * size);
+		ctx.lineTo(x, y - 215 * size);
+		ctx.lineTo(x - 10 * size, y - 155 * size);
+		ctx.lineTo(x - 10 * size, y - 25 * size);
+		ctx.lineTo(x - 35 * size, y - 25 * size);
+		ctx.lineTo(x - 35 * size, y - 15 * size);
+		ctx.lineTo(x - 5 * size, y - 15 * size);
+		ctx.lineTo(x - 5 * size, y + 35 * size);
+		ctx.fill();
+		
+		ctx.translate(x, y);
+		ctx.rotate(-radian);
+		ctx.translate(-x, -y);
+	},
+	
+	shield: function(ctx, x, y, size) {
+		//quadraticCurveTo(cp1x, cp1y, x, y)
+		//bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y)
+	},
 }

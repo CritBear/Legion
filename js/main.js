@@ -57,7 +57,7 @@ var player = {
 	},
 };
 
-var c1;
+var c1, c2;
 
 function init() {
 	
@@ -77,6 +77,7 @@ function init() {
 	
 	
 	c1 = makeCharacter("tmp").setPos(new Vector(10,10)).setSize(30,90).spawn();
+	c2 = makeCharacter("tmp2").setPos(new Vector(50, 10)).setSize(33,100).setType("shield").spawn();
 	
 	Game.ctx.font = "20px Arial";
 	
@@ -111,7 +112,7 @@ function update() {
 	c1.update();
 	player.update();
 	
-	DrawTool.sword(Game.ctx, 100, 100, 10, 100, 0);
+	DrawTool.sword(Game.ctx, 100, 100, 0.5, 0);
 	
 	// Debuging______________________________________
 	Game.ctx.fillText(c1.vel.x, 10, 200);
